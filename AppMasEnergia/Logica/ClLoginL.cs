@@ -3,7 +3,7 @@ using AppMasEnergia.Entidades;
 
 namespace AppMasEnergia.Logica
 {
-    public class LoginLN
+    public class ClLoginL
     {
         ClLoginD loginDao = new ClLoginD();
 
