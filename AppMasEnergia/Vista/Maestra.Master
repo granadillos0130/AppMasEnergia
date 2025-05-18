@@ -4,45 +4,365 @@
 <html>
 <head runat="server">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>Panel Administrador</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MasEnergia - Panel Administrador</title>
 
     <style>
-        body {
+        * {
             margin: 0;
-            font-family: Arial, sans-serif;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .sidebar {
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8fffe 0%, #e8f5e9 50%, #fff8e1 100%);
+            min-height: 100vh;
+            color: #2c3e50;
+        }
+
+        /* Header superior */
+        .top-header {
             position: fixed;
-            left: 0;
             top: 0;
-            height: 100%;
-            width: 220px;
-            background-color: #2c3e50;
-            padding-top: 60px;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: linear-gradient(135deg, #2E7D32, #4CAF50);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-logo img {
+            width: 45px;
+            height: auto;
+            filter: brightness(1.1);
+        }
+
+        .header-title {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
             color: white;
         }
 
-        .sidebar a {
-            display: block;
-            color: white;
-            padding: 12px 20px;
-            text-decoration: none;
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
             font-size: 16px;
         }
 
-        .sidebar a:hover {
-            background-color: #34495e;
+        .user-role {
+            font-size: 12px;
+            opacity: 0.9;
+            color: #C8E6C9;
         }
 
-        .content {
-            margin-left: 220px;
-            padding: 20px;
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.3s;
         }
 
-        .sidebar h2 {
-            text-align: center;
+        .menu-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 70px;
+            height: calc(100vh - 70px);
+            width: 280px;
+            background: linear-gradient(180deg, #2E7D32 0%, #388E3C 50%, #4CAF50 100%);
+            padding: 30px 0;
+            overflow-y: auto;
+            z-index: 900;
+            transition: transform 0.3s ease;
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+
+        .sidebar-section {
             margin-bottom: 30px;
+        }
+
+        .sidebar-section-title {
+            padding: 0 25px 15px;
+            color: #C8E6C9;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 15px 0 0;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: #FF8F00;
+            transform: translateX(5px);
+            color: #FFF;
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, rgba(255, 143, 0, 0.2), rgba(255, 152, 0, 0.1));
+            border-left-color: #FF8F00;
+            color: #FFF;
+            box-shadow: inset 0 0 0 1px rgba(255, 143, 0, 0.3);
+        }
+
+        .nav-icon {
+            margin-right: 15px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background: #FF5722;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Contenido principal */
+        .main-content {
+            margin-left: 280px;
+            margin-top: 70px;
+            padding: 40px;
+            min-height: calc(100vh - 70px);
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.expanded {
+            margin-left: 0;
+        }
+
+        .content-header {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .content-body {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            border: 1px solid #E8F5E9;
+        }
+
+        /* Efectos de hover para cards */
+        .content-header:hover,
+        .content-body:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .header-title {
+                font-size: 20px;
+            }
+
+            .sidebar {
+                width: 260px;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .user-info {
+                display: none;
+            }
+
+            .top-header {
+                padding: 0 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content-header,
+            .content-body {
+                padding: 20px;
+            }
+
+            .nav-link {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+
+            .sidebar {
+                width: 240px;
+            }
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-content {
+            animation: fadeIn 0.6s ease;
+        }
+
+        /* Overlay para móvil */
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 800;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-overlay.show {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Botón de cerrar sesión destacado */
+        .logout-section {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            padding: 0 15px;
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: #FFCDD2;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            background: rgba(244, 67, 54, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(244, 67, 54, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .logout-link:hover {
+            background: rgba(244, 67, 54, 0.2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.3);
+        }
+
+        /* Indicador de página activa */
+        .page-indicator {
+            position: absolute;
+            right: 15px;
+            width: 8px;
+            height: 8px;
+            background: #FF8F00;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-link.active .page-indicator {
+            opacity: 1;
         }
     </style>
 
@@ -51,22 +371,215 @@
 
 <body>
     <form id="form1" runat="server">
-        <!-- Barra lateral -->
-        <div class="sidebar">
-            <h2>Admin</h2>
-            <a href="VerPrestamos.aspx">📋 Ver Préstamos</a>
-            <a href="AgregarProducto.aspx">➕ Agregar Producto</a>
-            <a href="VerClientes.aspx">👥 Ver Clientes</a>
-            <a href="AgregarCliente.aspx">➕ Agregar Cliente</a>
-            <a href="VerProductos.aspx">📦 Ver Productos</a>
-            <a href="CerrarSesion.aspx">🚪 Cerrar Sesión</a>
-        </div>
+        <!-- Header superior -->
+        <header class="top-header">
+            <button type="button" class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <div class="header-logo">
+                <img src="../Resources/Logo.jpg" alt="MasEnergia Logo" />
+                <span class="header-title">MasEnergia</span>
+            </div>
+            <div class="header-user">
+                <div class="user-info">
+                    <div class="user-name" id="userName">Administrador</div>
+                    <div class="user-role" id="userRole">Gestión del Sistema</div>
+                </div>
+                <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px;">
+                    👤
+                </div>
+            </div>
+        </header>
+
+        <!-- Overlay para móvil -->
+        <div class="mobile-overlay" onclick="closeSidebar()"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <!-- Sección Principal -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Panel Principal</div>
+                <ul class="sidebar-nav">
+                    <li class="nav-item">
+                        <a href="VerPrestamos.aspx" class="nav-link" data-page="prestamos">
+                            <span class="nav-icon">📋</span>
+                            <span>Ver Préstamos</span>
+                            <span class="page-indicator"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Sección Productos -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Productos</div>
+                <ul class="sidebar-nav">
+                    <li class="nav-item">
+                        <a href="VerProductos.aspx" class="nav-link" data-page="productos">
+                            <span class="nav-icon">📦</span>
+                            <span>Ver Productos</span>
+                            <span class="page-indicator"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="AgregarProducto.aspx" class="nav-link" data-page="agregar-producto">
+                            <span class="nav-icon">➕</span>
+                            <span>Agregar Producto</span>
+                            <span class="page-indicator"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Sección Clientes -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">Clientes</div>
+                <ul class="sidebar-nav">
+                    <li class="nav-item">
+                        <a href="VerClientes.aspx" class="nav-link" data-page="clientes">
+                            <span class="nav-icon">👥</span>
+                            <span>Ver Clientes</span>
+                            <span class="page-indicator"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="AgregarCliente.aspx" class="nav-link" data-page="agregar-cliente">
+                            <span class="nav-icon">👤</span>
+                            <span>Agregar Cliente</span>
+                            <span class="page-indicator"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Botón de cerrar sesión -->
+            <div class="logout-section">
+                <a href="../Index.aspx" class="logout-link" onclick="return confirm('¿Está seguro de que desea cerrar sesión?')">
+                    <span class="nav-icon">🚪</span>
+                    <span>Cerrar Sesión</span>
+                </a>
+            </div>
+        </aside>
 
         <!-- Contenido principal -->
-        <div class="content">
-            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
-            </asp:ContentPlaceHolder>
-        </div>
+        <main class="main-content" id="mainContent">
+            <div class="content-header">
+                <asp:ContentPlaceHolder ID="ContentHeader" runat="server">
+                    <h1 style="color: #2E7D32; font-size: 28px; font-weight: 700;">Panel de Administración</h1>
+                    <p style="color: #666; margin-top: 8px;">Gestione los recursos de MasEnergia desde aquí</p>
+                </asp:ContentPlaceHolder>
+            </div>
+
+            <div class="content-body">
+                <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                    <div style="text-align: center; padding: 60px 20px; color: #666;">
+                        <div style="font-size: 48px; margin-bottom: 20px;">🏠</div>
+                        <h2 style="color: #2E7D32; margin-bottom: 15px;">Bienvenido al Panel de MasEnergia</h2>
+                        <p>Seleccione una opción del menú lateral para comenzar.</p>
+                    </div>
+                </asp:ContentPlaceHolder>
+            </div>
+        </main>
     </form>
+
+    <script type="text/javascript">
+        // Toggle sidebar en móvil
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.mobile-overlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        // Cerrar sidebar
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.mobile-overlay');
+            
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
+        }
+
+        // Marcar enlace activo
+        function setActiveLink() {
+            const currentPage = window.location.pathname.split('/').pop().toLowerCase();
+            const links = document.querySelectorAll('.nav-link');
+            
+            links.forEach(link => {
+                link.classList.remove('active');
+                const page = link.getAttribute('data-page');
+                
+                if (currentPage.includes(page) || 
+                    (currentPage === 'verprestamos.aspx' && page === 'prestamos') ||
+                    (currentPage === 'verproductos.aspx' && page === 'productos') ||
+                    (currentPage === 'agregarproducto.aspx' && page === 'agregar-producto') ||
+                    (currentPage === 'verclientes.aspx' && page === 'clientes') ||
+                    (currentPage === 'agregarcliente.aspx' && page === 'agregar-cliente')) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Configurar información del usuario
+        function setupUserInfo() {
+            // Aquí puedes obtener la información del usuario desde el Session
+            const userName = '<%= Session["AdminNombre"] != null ? Session["AdminNombre"].ToString() : "Administrador" %>';
+            const userRole = '<%= Session["AdminRol"] != null ? Session["AdminRol"].ToString() : "Gestión del Sistema" %>';
+            
+            if (document.getElementById('userName')) {
+                document.getElementById('userName').textContent = userName;
+            }
+            if (document.getElementById('userRole')) {
+                document.getElementById('userRole').textContent = userRole;
+            }
+        }
+
+        // Cerrar sidebar al hacer clic en enlaces (móvil)
+        document.addEventListener('DOMContentLoaded', function() {
+            setActiveLink();
+            setupUserInfo();
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        closeSidebar();
+                    }
+                });
+            });
+
+            // Cerrar sidebar al redimensionar la ventana
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    closeSidebar();
+                }
+            });
+
+            // Efecto de hover en las cards
+            const cards = document.querySelectorAll('.content-header, .content-body');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 8px 30px rgba(0, 0, 0, 0.1)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.05)';
+                });
+            });
+        });
+
+        // Prevenir el envío del formulario cuando se hace clic en el botón del menú
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleSidebar();
+                });
+            }
+        });
+    </script>
 </body>
 </html>
