@@ -27,7 +27,7 @@ namespace AppMasEnergia.Datos
                             listaPrestamos.Add(new Prestamo()
                             {
                                 PrestamoID = Convert.ToInt32(dr["PrestamoID"]),
-                                Empresa = dr["Empresa"].ToString(),
+                                Empresa = dr["NombreEmpresa"].ToString(),
                                 Productos = dr["Productos"].ToString(),
                                 CantidadTotalPrestada = Convert.ToInt32(dr["CantidadTotalPrestada"]),
                                 FechaPrestamo = Convert.ToDateTime(dr["FechaPrestamo"]),

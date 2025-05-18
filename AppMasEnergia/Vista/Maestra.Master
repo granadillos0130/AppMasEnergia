@@ -36,6 +36,75 @@
             justify-content: space-between;
             padding: 0 30px;
             backdrop-filter: blur(10px);
+            transition: padding-left 0.3s ease;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Botón toggle sidebar */
+        .sidebar-toggle {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar-toggle:active {
+            transform: translateY(0);
+        }
+
+        /* Icono hamburguesa animado */
+        .hamburger {
+            width: 20px;
+            height: 16px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hamburger span {
+            display: block;
+            height: 2px;
+            width: 100%;
+            background: white;
+            border-radius: 1px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        /* Animación del icono cuando el sidebar está colapsado */
+        .sidebar-collapsed .hamburger span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .sidebar-collapsed .hamburger span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        .sidebar-collapsed .hamburger span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
         }
 
         .header-logo {
@@ -105,13 +174,45 @@
             background: linear-gradient(180deg, #2E7D32 0%, #388E3C 50%, #4CAF50 100%);
             padding: 30px 0;
             overflow-y: auto;
+            overflow-x: hidden;
             z-index: 900;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
             box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
         }
 
+        /* Sidebar colapsado */
         .sidebar.collapsed {
-            transform: translateX(-100%);
+            width: 65px;
+            padding: 30px 0;
+        }
+
+        .sidebar.collapsed .sidebar-section-title,
+        .sidebar.collapsed .nav-text,
+        .sidebar.collapsed .nav-badge {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .sidebar.collapsed .nav-link {
+            justify-content: center;
+            padding: 15px 0;
+        }
+
+        .sidebar.collapsed .nav-icon {
+            margin-right: 0;
+        }
+
+        .sidebar.collapsed .logout-section {
+            padding: 0 10px;
+        }
+
+        .sidebar.collapsed .logout-link {
+            justify-content: center;
+            padding: 15px 10px;
+        }
+
+        .sidebar.collapsed .logout-text {
+            display: none;
         }
 
         .sidebar-section {
@@ -126,6 +227,9 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         .sidebar-nav {
@@ -135,6 +239,7 @@
 
         .nav-item {
             margin-bottom: 5px;
+            position: relative;
         }
 
         .nav-link {
@@ -185,6 +290,13 @@
             font-size: 18px;
             width: 24px;
             text-align: center;
+            transition: margin-right 0.3s ease;
+        }
+
+        .nav-text {
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         .nav-badge {
@@ -195,6 +307,36 @@
             border-radius: 12px;
             font-size: 11px;
             font-weight: 600;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Tooltip para elementos del sidebar colapsado */
+        .sidebar.collapsed .nav-link {
+            position: relative;
+        }
+
+        .sidebar.collapsed .nav-link::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1100;
+            margin-left: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar.collapsed .nav-link:hover::after {
+            opacity: 1;
         }
 
         /* Contenido principal */
@@ -207,7 +349,7 @@
         }
 
         .main-content.expanded {
-            margin-left: 0;
+            margin-left: 65px;
         }
 
         .content-header {
@@ -241,6 +383,10 @@
                 display: block;
             }
 
+            .sidebar-toggle {
+                display: none;
+            }
+
             .header-title {
                 font-size: 20px;
             }
@@ -254,9 +400,17 @@
                 transform: translateX(0);
             }
 
+            .sidebar.collapsed {
+                transform: translateX(-100%);
+            }
+
             .main-content {
                 margin-left: 0;
                 padding: 20px;
+            }
+
+            .main-content.expanded {
+                margin-left: 0;
             }
 
             .user-info {
@@ -326,6 +480,7 @@
             left: 0;
             right: 0;
             padding: 0 15px;
+            transition: padding 0.3s ease;
         }
 
         .logout-link {
@@ -349,6 +504,10 @@
             box-shadow: 0 5px 15px rgba(244, 67, 54, 0.3);
         }
 
+        .logout-text {
+            transition: opacity 0.3s ease;
+        }
+
         /* Indicador de página activa */
         .page-indicator {
             position: absolute;
@@ -364,6 +523,23 @@
         .nav-link.active .page-indicator {
             opacity: 1;
         }
+
+        /* Indicador visual de estado colapsado */
+        .collapse-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 6px;
+            height: 6px;
+            background: #FF8F00;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar.collapsed .collapse-indicator {
+            opacity: 1;
+        }
     </style>
 
     <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
@@ -372,11 +548,22 @@
 <body>
     <form id="form1" runat="server">
         <!-- Header superior -->
-        <header class="top-header">
-            <button type="button" class="menu-toggle" onclick="toggleSidebar()">☰</button>
-            <div class="header-logo">
-                <img src="../Resources/Logo.jpg" alt="MasEnergia Logo" />
-                <span class="header-title">MasEnergia</span>
+        <header class="top-header" id="topHeader">
+            <div class="header-left">
+                <!-- Botón toggle sidebar para desktop -->
+                <button type="button" class="sidebar-toggle" id="sidebarToggle">
+                    <div class="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </button>
+                <!-- Botón toggle sidebar para móvil -->
+                <button type="button" class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <div class="header-logo">
+                    <img src="../Resources/Logo.jpg" alt="MasEnergia Logo" />
+                    <span class="header-title">MasEnergia</span>
+                </div>
             </div>
             <div class="header-user">
                 <div class="user-info">
@@ -394,14 +581,17 @@
 
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
+            <!-- Indicador de estado colapsado -->
+            <div class="collapse-indicator"></div>
+            
             <!-- Sección Principal -->
             <div class="sidebar-section">
                 <div class="sidebar-section-title">Panel Principal</div>
                 <ul class="sidebar-nav">
                     <li class="nav-item">
-                        <a href="VerPrestamos.aspx" class="nav-link" data-page="prestamos">
+                        <a href="VerPrestamos.aspx" class="nav-link" data-page="prestamos" data-tooltip="Ver Préstamos">
                             <span class="nav-icon">📋</span>
-                            <span>Ver Préstamos</span>
+                            <span class="nav-text">Ver Préstamos</span>
                             <span class="page-indicator"></span>
                         </a>
                     </li>
@@ -413,16 +603,16 @@
                 <div class="sidebar-section-title">Productos</div>
                 <ul class="sidebar-nav">
                     <li class="nav-item">
-                        <a href="VerProductos.aspx" class="nav-link" data-page="productos">
+                        <a href="VerProductos.aspx" class="nav-link" data-page="productos" data-tooltip="Ver Productos">
                             <span class="nav-icon">📦</span>
-                            <span>Ver Productos</span>
+                            <span class="nav-text">Ver Productos</span>
                             <span class="page-indicator"></span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="AgregarProducto.aspx" class="nav-link" data-page="agregar-producto">
+                        <a href="AgregarProducto.aspx" class="nav-link" data-page="agregar-producto" data-tooltip="Agregar Producto">
                             <span class="nav-icon">➕</span>
-                            <span>Agregar Producto</span>
+                            <span class="nav-text">Agregar Producto</span>
                             <span class="page-indicator"></span>
                         </a>
                     </li>
@@ -434,16 +624,16 @@
                 <div class="sidebar-section-title">Clientes</div>
                 <ul class="sidebar-nav">
                     <li class="nav-item">
-                        <a href="VerClientes.aspx" class="nav-link" data-page="clientes">
+                        <a href="VerClientes.aspx" class="nav-link" data-page="clientes" data-tooltip="Ver Clientes">
                             <span class="nav-icon">👥</span>
-                            <span>Ver Clientes</span>
+                            <span class="nav-text">Ver Clientes</span>
                             <span class="page-indicator"></span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="AgregarCliente.aspx" class="nav-link" data-page="agregar-cliente">
+                        <a href="AgregarCliente.aspx" class="nav-link" data-page="agregar-cliente" data-tooltip="Agregar Cliente">
                             <span class="nav-icon">👤</span>
-                            <span>Agregar Cliente</span>
+                            <span class="nav-text">Agregar Cliente</span>
                             <span class="page-indicator"></span>
                         </a>
                     </li>
@@ -452,9 +642,9 @@
 
             <!-- Botón de cerrar sesión -->
             <div class="logout-section">
-                <a href="../Index.aspx" class="logout-link" onclick="return confirm('¿Está seguro de que desea cerrar sesión?')">
+                <a href="../Index.aspx" class="logout-link" data-tooltip="Cerrar Sesión" onclick="return confirm('¿Está seguro de que desea cerrar sesión?')">
                     <span class="nav-icon">🚪</span>
-                    <span>Cerrar Sesión</span>
+                    <span class="logout-text">Cerrar Sesión</span>
                 </a>
             </div>
         </aside>
@@ -481,34 +671,127 @@
     </form>
 
     <script type="text/javascript">
-        // Toggle sidebar en móvil
+        // Estado del sidebar
+        let sidebarCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+
+        // Elementos del DOM
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const body = document.body;
+
+        // Inicializar estado del sidebar
+        function initializeSidebar() {
+            if (sidebarCollapsed) {
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('expanded');
+                body.classList.add('sidebar-collapsed');
+            }
+        }
+
+        // Toggle sidebar (desktop)
+        function toggleSidebarCollapse() {
+            sidebarCollapsed = !sidebarCollapsed;
+
+            if (sidebarCollapsed) {
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('expanded');
+                body.classList.add('sidebar-collapsed');
+            } else {
+                sidebar.classList.remove('collapsed');
+                mainContent.classList.remove('expanded');
+                body.classList.remove('sidebar-collapsed');
+            }
+
+            // Guardar estado en localStorage
+            localStorage.setItem('sidebarCollapsed', sidebarCollapsed);
+        }
+
+        // Toggle sidebar (móvil)
         function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
             const overlay = document.querySelector('.mobile-overlay');
-            
             sidebar.classList.toggle('open');
             overlay.classList.toggle('show');
         }
 
-        // Cerrar sidebar
+        // Cerrar sidebar (móvil)
         function closeSidebar() {
-            const sidebar = document.getElementById('sidebar');
             const overlay = document.querySelector('.mobile-overlay');
-            
             sidebar.classList.remove('open');
             overlay.classList.remove('show');
         }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeSidebar();
+
+            // Evento para el botón toggle del sidebar
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleSidebarCollapse();
+                });
+            }
+
+            // Marcar enlace activo
+            setActiveLink();
+
+            // Configurar información del usuario
+            setupUserInfo();
+
+            // Event listeners para cerrar sidebar en móvil al hacer clic en enlaces
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function () {
+                    if (window.innerWidth <= 768) {
+                        closeSidebar();
+                    }
+                });
+            });
+
+            // Cerrar sidebar al redimensionar la ventana
+            window.addEventListener('resize', function () {
+                if (window.innerWidth > 768) {
+                    closeSidebar();
+                }
+            });
+
+            // Efectos de hover en las cards
+            const cards = document.querySelectorAll('.content-header, .content-body');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function () {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 8px 30px rgba(0, 0, 0, 0.1)';
+                });
+
+                card.addEventListener('mouseleave', function () {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.05)';
+                });
+            });
+
+            // Atajo de teclado para toggle sidebar (Ctrl + B)
+            document.addEventListener('keydown', function (e) {
+                if (e.ctrlKey && e.key === 'b') {
+                    e.preventDefault();
+                    if (window.innerWidth > 768) {
+                        toggleSidebarCollapse();
+                    }
+                }
+            });
+        });
 
         // Marcar enlace activo
         function setActiveLink() {
             const currentPage = window.location.pathname.split('/').pop().toLowerCase();
             const links = document.querySelectorAll('.nav-link');
-            
+
             links.forEach(link => {
                 link.classList.remove('active');
                 const page = link.getAttribute('data-page');
-                
-                if (currentPage.includes(page) || 
+
+                if (currentPage.includes(page) ||
                     (currentPage === 'verprestamos.aspx' && page === 'prestamos') ||
                     (currentPage === 'verproductos.aspx' && page === 'productos') ||
                     (currentPage === 'agregarproducto.aspx' && page === 'agregar-producto') ||
@@ -521,10 +804,9 @@
 
         // Configurar información del usuario
         function setupUserInfo() {
-            // Aquí puedes obtener la información del usuario desde el Session
             const userName = '<%= Session["AdminNombre"] != null ? Session["AdminNombre"].ToString() : "Administrador" %>';
             const userRole = '<%= Session["AdminRol"] != null ? Session["AdminRol"].ToString() : "Gestión del Sistema" %>';
-            
+
             if (document.getElementById('userName')) {
                 document.getElementById('userName').textContent = userName;
             }
@@ -533,53 +815,50 @@
             }
         }
 
-        // Cerrar sidebar al hacer clic en enlaces (móvil)
-        document.addEventListener('DOMContentLoaded', function() {
-            setActiveLink();
-            setupUserInfo();
-            
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    if (window.innerWidth <= 768) {
-                        closeSidebar();
-                    }
-                });
-            });
+        // Efecto de ripple en los botones (opcional)
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const circle = document.createElement("span");
+            const diameter = Math.max(button.clientWidth, button.clientHeight);
+            const radius = diameter / 2;
 
-            // Cerrar sidebar al redimensionar la ventana
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 768) {
-                    closeSidebar();
-                }
-            });
+            circle.style.width = circle.style.height = `${diameter}px`;
+            circle.style.left = `${event.clientX - button.offsetLeft - radius}px`;
+            circle.style.top = `${event.clientY - button.offsetTop - radius}px`;
+            circle.classList.add("ripple");
 
-            // Efecto de hover en las cards
-            const cards = document.querySelectorAll('.content-header, .content-body');
-            cards.forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-2px)';
-                    this.style.boxShadow = '0 8px 30px rgba(0, 0, 0, 0.1)';
-                });
-                
-                card.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                    this.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.05)';
-                });
-            });
-        });
+            const ripple = button.getElementsByClassName("ripple")[0];
 
-        // Prevenir el envío del formulario cuando se hace clic en el botón del menú
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuToggle = document.querySelector('.menu-toggle');
-            if (menuToggle) {
-                menuToggle.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    toggleSidebar();
-                });
+            if (ripple) {
+                ripple.remove();
             }
-        });
+
+            button.appendChild(circle);
+        }
+
+        // Agregar efecto ripple al botón toggle
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', createRipple);
+        }
     </script>
+
+    <style>
+        /* Efecto ripple (opcional) */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(0);
+            animation: ripple-animation 600ms linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    </style>
 </body>
 </html>

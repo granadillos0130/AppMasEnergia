@@ -44,5 +44,15 @@ namespace AppMasEnergia.Vista
                 throw;
             }
         }
+
+        protected void btnFiltrar_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnLimpiar_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
