@@ -68,7 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Index.aspx" />
-    <Content Include="Resources\Logo.jpg" />
+    <Content Include="Resources\Logo.png" />
     <Content Include="Vista\VerPrestamos.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
